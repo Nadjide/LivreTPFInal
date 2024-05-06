@@ -6,12 +6,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
-import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.SimpleEmail;
-
-import java.io.StringWriter;
-import java.util.Properties;
-
 
 public class HelloController {
     @FXML
@@ -43,46 +37,11 @@ public class HelloController {
 
     @FXML
     private Button delete;
-    public class EmailNotificationService {
 
-        private static final String HOST_NAME = "mail.gmx.com";
-        private static final int SMTP_PORT = 587;
-        private static final String USERNAME = "nadjideYnov@gmx.fr";
-        private static final String PASSWORD = "Ynov12345678!";
-        private static final String FROM_EMAIL = "nadjideYnov@gmx.fr";
-        private static final String TO_EMAIL = "nadjide.omar.5@gmail.com";
-        private static final String SUBJECT = "Book Notification";
+    private EmailNotificationService emailNotificationService;
 
-        public void sendEmailNotification(String action, Book book) {
-            try {
-                // Prepare the email body
-                String emailBody = "Cher utilisateur,\n\n" +
-                        "Une action de " + action + " a été effectuée sur le livre suivant :\n\n" +
-                        "Titre : " + book.getTitle() + "\n" +
-                        "Auteur : " + book.getAuthor() + "\n" +
-                        "ISBN : " + book.getIsbn() + "\n" +
-                        "Année : " + book.getYear() + "\n" +
-                        "Pages : " + book.getPages() + "\n" +
-                        "Description : " + book.getDescription() + "\n\n" +
-                        "Cordialement,\n" +
-                        "Votre équipe";
-
-                SimpleEmail email = new SimpleEmail();
-                email.setHostName(HOST_NAME);
-                email.setSmtpPort(SMTP_PORT);
-                email.setAuthenticator(new DefaultAuthenticator(USERNAME, PASSWORD));
-                email.setStartTLSEnabled(true);
-                email.setFrom(FROM_EMAIL);
-                email.setSubject(SUBJECT);
-                email.setMsg(emailBody);
-                email.addTo(TO_EMAIL);
-
-                email.send();
-                System.out.println("Email sent");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+    public HelloController() {
+        emailNotificationService = new EmailNotificationService();
     }
 
     @FXML
@@ -96,7 +55,7 @@ public class HelloController {
         book.setDescription(description.getText());
 
         bookList.getItems().add(book);
-        new EmailNotificationService().sendEmailNotification("ajout", book);
+        emailNotificationService.sendEmailNotification("ajout", book);
     }
 
     @FXML
@@ -110,7 +69,7 @@ public class HelloController {
             selectedBook.setPages(pages.getText());
             selectedBook.setDescription(description.getText());
             bookList.refresh();
-            new EmailNotificationService().sendEmailNotification("modification", selectedBook);
+            emailNotificationService.sendEmailNotification("modification", selectedBook);
         }
     }
 
@@ -119,7 +78,7 @@ public class HelloController {
         Book selectedBook = bookList.getSelectionModel().getSelectedItem();
         if (selectedBook != null) {
             bookList.getItems().remove(selectedBook);
-            new EmailNotificationService().sendEmailNotification("suppression", selectedBook);
+            emailNotificationService.sendEmailNotification("suppression", selectedBook);
         }
     }
 }
