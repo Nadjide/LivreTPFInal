@@ -62,9 +62,9 @@
                     <TextField fx:id="pages" promptText="Pages"/>
                     <TextArea fx:id="description" promptText="Description" VBox.vgrow="ALWAYS"/>
                     <HBox spacing="10">
-                        <Button fx:id="add" text="Add" />
-                        <Button fx:id="edit" text="Edit" />
-                        <Button fx:id="delete" text="Delete"/>
+                        <Button fx:id="add" text="Add" onAction="#addBook" />
+                        <Button fx:id="edit" text="Edit" onAction="#editBook" />
+                        <Button fx:id="delete" text="Delete" onAction="#deleteBook"/>
                     </HBox>
                 </VBox>
             </HBox>
